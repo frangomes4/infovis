@@ -1,1 +1,488 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Una semana de mi vida — TP InfoVis ITBA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #FBF9F4;
+            --surface: #FFFFFF;
+            --ink: #1F1D1A;
+            --muted: #6B6962;
+            --soft: #B5B2A8;
+            --line: #E8E4D9;
+            --accent: #E25822;
+            --accent-soft: #FBE5DA;
+            --green: #4A7C59;
+            --yellow: #E8B339;
+        }
 
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: var(--bg);
+            color: var(--ink);
+            font-family: 'Inter', -apple-system, sans-serif;
+            font-weight: 400;
+            font-size: 17px;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 64px 24px 100px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 80px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .header__author { color: var(--ink); font-weight: 500; }
+
+        .hero { margin-bottom: 64px; }
+
+        .hero__date {
+            font-size: 14px;
+            color: var(--accent);
+            font-weight: 500;
+            margin-bottom: 16px;
+            letter-spacing: 0.02em;
+        }
+
+        h1 {
+            font-family: 'Instrument Serif', Georgia, serif;
+            font-weight: 400;
+            font-size: clamp(48px, 8vw, 76px);
+            line-height: 1.05;
+            letter-spacing: -0.02em;
+            color: var(--ink);
+            margin-bottom: 24px;
+        }
+
+        h1 i { font-style: italic; color: var(--accent); }
+
+        .hero__lead {
+            font-size: 20px;
+            line-height: 1.55;
+            color: var(--muted);
+            max-width: 580px;
+        }
+
+        .intro { margin-bottom: 80px; }
+        .intro p { margin-bottom: 20px; }
+
+        .intro p:first-child::first-letter {
+            font-family: 'Instrument Serif', serif;
+            font-size: 56px;
+            float: left;
+            line-height: 0.9;
+            margin: 6px 8px 0 0;
+            color: var(--accent);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin: 48px 0;
+        }
+
+        .stat {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat__num {
+            font-family: 'Instrument Serif', serif;
+            font-size: 42px;
+            line-height: 1;
+            color: var(--accent);
+            margin-bottom: 6px;
+        }
+
+        .stat__label {
+            font-size: 12px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .section { margin: 96px 0; }
+
+        .section__num {
+            font-size: 13px;
+            color: var(--muted);
+            font-weight: 500;
+            margin-bottom: 12px;
+            letter-spacing: 0.06em;
+        }
+
+        .section__num span { color: var(--accent); }
+
+        h2 {
+            font-family: 'Instrument Serif', Georgia, serif;
+            font-weight: 400;
+            font-size: clamp(32px, 5vw, 44px);
+            line-height: 1.15;
+            letter-spacing: -0.01em;
+            color: var(--ink);
+            margin-bottom: 24px;
+        }
+
+        .tool {
+            display: inline-block;
+            background: var(--accent-soft);
+            color: var(--accent);
+            font-size: 12px;
+            font-weight: 500;
+            padding: 4px 10px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            letter-spacing: 0.02em;
+        }
+
+        .section__text p { margin-bottom: 16px; color: var(--ink); }
+        .section__text strong { font-weight: 600; }
+
+        .viz {
+            margin: 32px 0;
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 16px;
+            overflow: hidden;
+        }
+
+        .viz iframe, .viz img, .viz svg {
+            width: 100%;
+            display: block;
+            border: none;
+            border-radius: 0;
+        }
+
+        .viz__placeholder {
+            color: var(--muted);
+            text-align: center;
+            font-size: 14px;
+            line-height: 1.6;
+            padding: 80px 40px;
+            min-height: 380px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .viz__placeholder strong {
+            color: var(--accent);
+            display: block;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .insight {
+            margin-top: 32px;
+            background: var(--accent-soft);
+            border-radius: 12px;
+            padding: 24px 28px;
+        }
+
+        .insight__label {
+            font-size: 11px;
+            color: var(--accent);
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .insight p { color: var(--ink); font-size: 15px; line-height: 1.6; margin: 0; }
+        .insight strong { color: var(--accent); font-weight: 600; }
+
+        .bench-table {
+            margin: 32px 0 0;
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            overflow: hidden;
+            font-size: 14px;
+        }
+
+        .bench-table table { width: 100%; border-collapse: collapse; }
+
+        .bench-table th {
+            background: var(--bg);
+            text-align: left;
+            padding: 14px 16px;
+            font-size: 11px;
+            color: var(--muted);
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .bench-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--line);
+            color: var(--ink);
+        }
+
+        .bench-table tr:last-child td { border-bottom: none; }
+        .bench-table .metric { font-weight: 500; }
+        .bench-table .value { font-variant-numeric: tabular-nums; font-weight: 500; }
+        .bench-table .recomend { color: var(--muted); font-size: 13px; }
+
+        .bench-table .status {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+        }
+
+        .status--ok { background: #E6F0E9; color: #4A7C59; }
+        .status--def { background: #FBE0E0; color: #C73E3E; }
+        .status--exc { background: #FBE5DA; color: #E25822; }
+
+        .conclusion {
+            margin-top: 96px;
+            padding: 40px;
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+        }
+
+        .conclusion__label {
+            font-size: 13px;
+            color: var(--accent);
+            font-weight: 500;
+            margin-bottom: 12px;
+            letter-spacing: 0.04em;
+        }
+
+        .conclusion h3 {
+            font-family: 'Instrument Serif', Georgia, serif;
+            font-weight: 400;
+            font-size: 32px;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            color: var(--ink);
+        }
+
+        .conclusion p { color: var(--muted); margin-bottom: 14px; }
+
+        footer {
+            margin-top: 60px;
+            padding-top: 24px;
+            border-top: 1px solid var(--line);
+            font-size: 13px;
+            color: var(--muted);
+            text-align: center;
+        }
+
+        footer a { color: var(--accent); text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+
+        @media (max-width: 640px) {
+            .wrap { padding: 32px 20px 80px; }
+            .stats { grid-template-columns: repeat(2, 1fr); }
+            .header { flex-direction: column; align-items: flex-start; gap: 4px; }
+            .conclusion { padding: 28px 24px; }
+        }
+    </style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="header">
+        <span><span class="header__author">Francisco Gomes</span> · TP InfoVis ITBA</span>
+        <span>2026</span>
+    </div>
+
+    <header class="hero">
+        <div class="hero__date">25 al 31 de marzo de 2026</div>
+        <h1>Una semana<br>de mi <i>vida</i>.</h1>
+        <p class="hero__lead">Durante siete días registré todo lo que hice, hora por hora. Esto es lo que aprendí mirando los datos.</p>
+    </header>
+
+    <section class="intro">
+        <p>Llevé un registro de mis actividades durante una semana entera. La idea era sencilla: anotar a qué hora empieza y termina cada cosa que hago, ponerle una categoría (dormir, trabajar, estudiar, comer, hacer deporte, ocio) y después ver qué sale.</p>
+
+        <p>Me inspiré en el proyecto <em>Dear Data</em>, donde dos diseñadoras se mandaban postales semanales con dibujos de sus propios datos. La diferencia es que yo en lugar de dibujar a mano usé herramientas de visualización para encontrar patrones.</p>
+
+        <p>Después de los siete días junté <strong>53 bloques de actividad</strong> y un total de <strong>147 horas registradas</strong>. No registré las microtransiciones (ducha, traslados, esperas) para no inflar los datos artificialmente. Lo que sigue son cuatro preguntas que me hice y cómo intenté responderlas.</p>
+
+        <div class="stats">
+            <div class="stat"><div class="stat__num">53</div><div class="stat__label">Bloques</div></div>
+            <div class="stat"><div class="stat__num">147h</div><div class="stat__label">Registradas</div></div>
+            <div class="stat"><div class="stat__num">7</div><div class="stat__label">Días</div></div>
+            <div class="stat"><div class="stat__num">6</div><div class="stat__label">Categorías</div></div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="section__num"><span>01</span> · Tableau</div>
+        <h2>¿Cómo se ve mi semana hora por hora?</h2>
+        <span class="tool">Heatmap</span>
+        <div class="section__text">
+            <p>Lo primero que quería ver era el panorama completo: una grilla con los 7 días en un eje y las 24 horas del día en el otro, pintada según qué estaba haciendo en cada momento.</p>
+            <p>Elegí Tableau porque es la mejor para armar este tipo de matrices con muchos datos. Te permite jugar con colores y filtros sin tener que escribir código.</p>
+        </div>
+        <div class="viz">
+            <div class="viz__placeholder">
+                <strong>Visualización en desarrollo</strong>
+                El heatmap de Tableau se publicará en la próxima entrega.
+            </div>
+        </div>
+        <div class="insight">
+            <div class="insight__label">Lo que veo</div>
+            <p>De lunes a viernes el patrón se repite casi idéntico: duermo hasta las 7, voy al gym a las 8, y de ahí en adelante es todo trabajo o facultad. El sábado y domingo cambia todo: desaparecen los bloques de estudio y aparecen muchas horas seguidas de ocio. <strong>Mi semana laboral es muy estructurada y mi fin de semana es lo opuesto.</strong></p>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="section__num"><span>02</span> · Flourish</div>
+        <h2>¿Cómo se compone cada día?</h2>
+        <span class="tool">Barras 100% apiladas</span>
+        <div class="section__text">
+            <p>Después quise comparar los días entre sí, pero no en horas absolutas (porque algunos días registré más que otros) sino en porcentajes. Una barra por día, dividida según el porcentaje que ocupa cada categoría.</p>
+            <p>Flourish me sirvió porque tiene una plantilla específica para barras 100% apiladas y deja agregar interactividad (tooltips) sin complicaciones.</p>
+        </div>
+        <div class="viz">
+            <div class="flourish-embed flourish-chart" data-src="visualisation/28787146">
+                <script src="https://public.flourish.studio/resources/embed.js"></script>
+                <noscript><img src="https://public.flourish.studio/visualisation/28787146/thumbnail" width="100%" alt="chart visualization" /></noscript>
+            </div>
+        </div>
+        <div class="insight">
+            <div class="insight__label">Lo que veo</div>
+            <p>El sábado el ocio ocupa más de la mitad de mi día. Los días de semana, el trabajo y estudio juntos siempre superan el 50%. Lo más interesante es comparar el sábado contra cualquier día laboral: parecen dos vidas distintas. <strong>El sábado es el único día sin sueño registrado</strong> — me voy a dormir tarde y duermo recién en la madrugada del domingo.</p>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="section__num"><span>03</span> · RAWGraphs</div>
+        <h2>¿Qué actividades concretas hago en la semana?</h2>
+        <span class="tool">Diagrama aluvial</span>
+        <div class="section__text">
+            <p>Las dos primeras visualizaciones me mostraban categorías generales (Ejercicio, Trabajo, Estudio, etc.). Pero quería ir más al detalle: ¿qué tipo de ejercicio hago? ¿solo gym, o también deportes? Para eso armé un diagrama aluvial que conecta tres niveles: el día, la categoría y la actividad concreta.</p>
+            <p>RAWGraphs es ideal para esto porque permite mapear varios niveles jerárquicos en un solo gráfico sin tener que armar la tabla resumen previo. Solamente le pasás los datos crudos y la herramienta los agrupa.</p>
+        </div>
+        <div class="viz">
+            <div class="viz__placeholder">
+                <strong>Visualización en desarrollo</strong>
+                El diagrama aluvial de RAWGraphs se publicará en la próxima entrega.
+            </div>
+        </div>
+        <div class="insight">
+            <div class="insight__label">Lo que veo</div>
+            <p>Mi rutina es muy modular: el Gym aparece todos los días de semana a la misma hora, la Oficina y la Facultad alternan según el día. Pero el fin de semana todo cambia: aparecen Padel, Tenis, Fútbol, Asado con amigos, Asado con la familia. <strong>El ejercicio durante la semana es entrenamiento en solitario; los fines de semana es deporte social.</strong> Son dos modos completamente distintos de moverme.</p>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="section__num"><span>04</span> · Datawrapper</div>
+        <h2>¿Estoy viviendo de manera saludable?</h2>
+        <span class="tool">Comparación con benchmarks</span>
+        <div class="section__text">
+            <p>Después de mirar mi semana decidí comparar mis números con los rangos recomendados: la OMS recomienda dormir entre 7 y 9 horas, hacer entre 2.5 y 5 horas de ejercicio moderado por semana, y la OIT marca 48 horas semanales como límite saludable de trabajo.</p>
+            <p>Datawrapper me dejó armar un gráfico de barras con áreas de referencia que muestran el rango recomendado al lado de mi valor real. Esto convierte el ejercicio en algo más útil que solo mirar mis datos: me dice si estoy bien o mal según la ciencia.</p>
+        </div>
+        <div class="viz">
+            <iframe title="¿Vivo una semana saludable?" aria-label="Bar Chart" id="datawrapper-chart-VZckm" src="https://datawrapper.dwcdn.net/VZckm/3/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="196" data-external="1"></iframe>
+            <script type="text/javascript">
+                window.addEventListener("message", function(a) {
+                    if (void 0 !== a.data["datawrapper-height"]) {
+                        var e = document.querySelectorAll("iframe");
+                        for (var t in a.data["datawrapper-height"])
+                            for (var r, i = 0; r = e[i]; i++)
+                                if (r.contentWindow === a.source) {
+                                    var d = a.data["datawrapper-height"][t] + "px";
+                                    r.style.height = d;
+                                }
+                    }
+                });
+            </script>
+        </div>
+        <div class="bench-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Métrica</th>
+                        <th>Mis horas/sem</th>
+                        <th>Recomendación</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="metric">Sueño</td>
+                        <td class="value">47</td>
+                        <td class="recomend">OMS: 49–63 h/sem (7–9 h/día)</td>
+                        <td><span class="status status--def">Déficit</span></td>
+                    </tr>
+                    <tr>
+                        <td class="metric">Ejercicio</td>
+                        <td class="value">14</td>
+                        <td class="recomend">OMS: 2.5–5 h/sem</td>
+                        <td><span class="status status--ok">OK</span></td>
+                    </tr>
+                    <tr>
+                        <td class="metric">Trabajo + Estudio</td>
+                        <td class="value">52</td>
+                        <td class="recomend">OIT: máx 48 h/sem</td>
+                        <td><span class="status status--exc">Excede</span></td>
+                    </tr>
+                    <tr>
+                        <td class="metric">Ocio social</td>
+                        <td class="value">18</td>
+                        <td class="recomend">Saludable: 7–21 h/sem</td>
+                        <td><span class="status status--ok">OK</span></td>
+                    </tr>
+                    <tr>
+                        <td class="metric">Comer</td>
+                        <td class="value">16</td>
+                        <td class="recomend">Saludable: 14–21 h/sem</td>
+                        <td><span class="status status--ok">OK</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="insight">
+            <div class="insight__label">Lo que veo</div>
+            <p>El sueño está apenas por debajo del mínimo recomendado: <strong>6.7 horas promedio por día</strong>, cuando la OMS sugiere entre 7 y 9. Es un déficit chico (faltan 2 horas a la semana), pero existe. El ejercicio en cambio sobra: hago casi tres veces más de lo recomendado. Y la suma de trabajo + estudio queda apenas por encima del límite de la OIT. La conclusión: dormir un poco más y bajar la carga laboral.</p>
+        </div>
+    </section>
+
+    <section class="conclusion">
+        <div class="conclusion__label">Conclusión</div>
+        <h3>La rutina está bien armada. Lo que más cargo es el trabajo y el estudio.</h3>
+        <p>Visualizar una semana mostró cosas que no se notan al vivirla. La estructura de mis días es muy ordenada y previsible —algo bueno para mantener hábitos— y el sueño está casi en el rango saludable, apenas dos horas por debajo del mínimo OMS. Lo que excede es la carga de trabajo más estudio: 52 horas semanales contra el límite de 48 que define la OIT.</p>
+        <p>Si tuviera que seguir tracking más tiempo, agregaría dos cosas: <strong>nivel de energía</strong> (del 1 al 5) y <strong>foco</strong> (con o sin interrupciones) en cada bloque. Eso me dejaría cruzar cuánto tiempo dedico a algo con qué tan bien lo aprovecho, que es algo que estos cuatro gráficos no muestran.</p>
+    </section>
+
+    <footer>
+        Francisco Gomes · ITBA · 2026
+    </footer>
+
+</div>
+</body>
+</html>
